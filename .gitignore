@@ -1,0 +1,2 @@
+3rdParty/*
+!3rdParty/vcpkg.json

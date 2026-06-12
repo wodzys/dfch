@@ -1,0 +1,16 @@
+{
+  "name": "df-chinese",
+  "version": "1.0.0",
+  "dependencies": [
+    "detours",
+    "spdlog",
+    "tomlplusplus"
+  ],
+  "overrides": [
+    {
+      "name": "detours",
+      "version": "4.0.1#8"
+    }
+  ],
+  "builtin-baseline": "d2452281016c6d77b6ef199d599d9929eafe4807"
+}
