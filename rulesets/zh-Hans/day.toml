@@ -3,9 +3,7 @@ base = "day"
 [[rulesets]]
 [rulesets.rules]
 "{%number}{number} {month}"="{%number}{number} {month}"
-"Year {%number}" = "{%number}年"
 "{^0} {season}" = "{^0}{season}"
-"{month} {%number}"="{%number}年 {month}"
 
 [[rulesets]]
 name = "number"

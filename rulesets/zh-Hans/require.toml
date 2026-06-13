@@ -3,6 +3,8 @@ base = "require"
 [[rulesets]]
 [rulesets.rules]
 "[Requires {main}]" = "[需要{main}]"
+"[Requires {::items::bar}]" = "[需要{::items::bar}]"
+"[Requires {::materials} ore]" = "[需要{::materials}矿石]"
 
 [[rulesets]]
 name = "main"
@@ -61,6 +63,4 @@ name = "main"
 "Copper-bearing boulders" = "含铜矿石"
 "Silver-bearing boulders" = "含银矿石"
 "Gold-bearing boulders" = "含金矿石"
-"{::materials} ore" = "{::materials}矿石"
-"{::items::bar}" = "{::items::bar}"
 "Refined coal" = "精炼煤"

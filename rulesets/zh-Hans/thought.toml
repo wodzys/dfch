@@ -7,22 +7,14 @@ base = "thought"
 [[rulesets]]
 name = "main"
 [rulesets.rules]
-"{textcolor}{sex}{kind}{mind}{textcolor1} {things}{tail}" = "{textcolor}{sex}{things}{kind}{mind}{textcolor1}。"
-"{textcolor}{sex}{kind}{mind}{memorycolor}dwelling upon{textcolor1} {things}{tail}" = "{textcolor}{sex}因{memorycolor}沉思{textcolor}一段{things}的经历{kind}{mind}{textcolor1}。"
-"{textcolor}{sex}{kind}{mind}{memorycolor}remembering{textcolor1} {things}{tail}" = "{textcolor}{sex}因{memorycolor}回忆起{textcolor}{things}的经历{kind}{mind}{textcolor1}。"
-"{wired}" = "{wired}"
-
-[[rulesets]]
-name = "wired"
-[rulesets.rules]
-"{textcolor}{sex}{kind}{mind}{textcolor1} {wired::things}" = "{textcolor}{sex}{kind}{mind}{textcolor1}当{wired::things}"
-"{textcolor}{sex}{kind}{mind}[C:5:0:0] dwelling upon{textcolor1} {wired::things}" = "{textcolor}{sex}{kind}{mind}{textcolor1}{wired::things}"
-"{textcolor}{sex}{kind}{mind}[C:5:0:0] remembering{textcolor1} {wired::things}" = "{textcolor}{sex}{kind}{mind}{textcolor1}{wired::things}"
-"{textcolor}body." = "{textcolor}body."
-"{textcolor}dead body." = "{textcolor}dead body."
-"{textcolor}goblet, cup or mug." = ""
-"{textcolor}{building_name}{tail}" = "{textcolor}{building_name}"
-"{textcolor}{things::realiton}{tail}" = "{textcolor}和{things::realiton}"
+"{sex}{kind} {mind::text} {things}{tail}" = "{sex}{things}{kind}{mind::text}。"
+"{sex}{kind} {mind::text} dwelling upon {things}{tail}" = "{sex}因沉思一段{things}的经历{kind}{mind::text}。"
+"{sex}{kind} {mind::text} remembering {things}{tail}" = "{sex}因回忆起{things}的经历{kind}{mind::text}。"
+"{sex}{kind} {mind::text} {wired::things}" = "{sex}{kind}{mind::text}当{wired::things}"
+"{sex}{kind} {mind::text} dwelling upon {wired::things}" = "{sex}{kind}{mind::text}{wired::things}"
+"{sex}{kind} {mind::text} remembering {wired::things}" = "{sex}回忆起{wired::things}{kind}{mind::text}。"
+"{building_name}{tail}" = "{building_name}"
+"{things::realiton}{tail}" = "和{things::realiton}"
 
 [[rulesets]]
 name = "wired::things"
@@ -31,6 +23,7 @@ name = "wired::things"
 "near {things::num}{building_own}{building_quility}{building_put}" = "当靠近{building_own}{building_quility}{building_put}"
 "playing with a" = "在玩了一个"
 "talking with {things::num}" = "进行交谈"
+"work." = "工作时"
 
 [[rulesets]]
 name = "things"
@@ -489,29 +482,6 @@ name = "sex"
 "She" = "她"
 
 [[rulesets]]
-name = "mind"
-[rulesets.rules]
-"{mind::color} {mind::text}" = "{mind::color}{mind::text}"
-
-[[rulesets]]
-name = "mind::color"
-optional = true
-[rulesets.rules]
-"[C:2:0:1]" = "[C:2:0:1]"
-"[C:2:0:0]" = "[C:2:0:0]"
-"[C:4:0:1]" = "[C:4:0:1]"
-"[C:4:0:0]" = "[C:4:0:0]"
-"[C:7:0:1]" = "[C:7:0:1]"
-"[C:7:0:0]" = "[C:7:0:0]"
-"[C:3:0:1]" = "[C:3:0:1]"
-"[C:3:0:0]" = "[C:3:0:0]"
-"[C:1:0:1]" = "[C:1:0:1]"
-"[C:6:0:1]" = "[C:6:0:1]"
-"[C:6:0:0]" = "[C:6:0:0]"
-"[C:5:0:1]" = "[C:5:0:1]"
-"[C:5:0:0]" = "[C:5:0:0]"
-
-[[rulesets]]
 name = "mind::text"
 [rulesets.rules]
 "adoration" = "崇拜"
@@ -754,25 +724,6 @@ name = "kind"
 " doesn't feel" = ""
 " feels" = "感到"
 " felt" = "感到"
-
-[[rulesets]]
-name = "textcolor"
-[rulesets.rules]
-"[C:7:0:1]" = "[C:7:0:1]"
-"[C:7:0:0]" = "[C:7:0:0]"
-
-[[rulesets]]
-name = "textcolor1"
-optional = true
-[rulesets.rules]
-"[C:7:0:1]" = "[C:7:0:1]"
-"[C:7:0:0]" = "[C:7:0:0]"
-
-[[rulesets]]
-name = "memorycolor"
-[rulesets.rules]
-"[C:5:0:1] " = "[C:5:0:1]"
-"[C:5:0:0] " = "[C:5:0:0]"
 
 [[rulesets]]
 name = "tail"

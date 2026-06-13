@@ -2,7 +2,7 @@ base = "items::goblet"
 
 [[rulesets]]
 [rulesets.rules]
-"{^0}{main}" = "{^0}{main}"
+"{^0}{main}{::items::$number}" = "{^0}{main}{::items::$number}"
 
 [[rulesets]]
 name = "^0"
@@ -16,4 +16,6 @@ name = "main"
 "goblet" = "高脚杯"
 "goblets" = "高脚杯"
 "cup" = "茶杯"
+"cups" = "茶杯"
 "mug" = "柄杯"
+"mugs" = "柄杯"
