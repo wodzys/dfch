@@ -1,0 +1,24 @@
+base = "items::barrel"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{main}" = "{^0}{main}"
+"{::items} Barrel{$0}" = "{::items}圆桶{$0}"
+
+[[rulesets]]
+name = "$0"
+optional = true
+[rulesets.rules]
+" ({::materials::adjective})" = " ({::materials::adjective})"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"barrel" = "圆桶"
+"barrels" = "圆桶"

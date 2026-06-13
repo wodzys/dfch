@@ -1,0 +1,5 @@
+base = "items::glob"
+
+[[rulesets]]
+[rulesets.rules]
+"{::items::liquid_glob}" = "{::items::liquid_glob}"

@@ -1,0 +1,81 @@
+base = "items::meat"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{^1}{main}" = "{^0}{^1}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"rotten " = "腐烂的"
+
+[[rulesets]]
+name = "^1"
+optional = true
+[rulesets.rules]
+"preserved " = "保存的"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"meat" = "肉"
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{^prefix}{^creature}{singular::main}" = "{^prefix}{^creature}{singular::main}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{^prefix}{^creature}{plural::main}" = "{^prefix}{^creature}{plural::main}"
+
+[[rulesets]]
+name = "^prefix"
+optional = true
+[rulesets.rules]
+"prepared " = "预备的"
+"chopped " = "切碎的"
+
+[[rulesets]]
+name = "^creature"
+optional = true
+[rulesets.rules]
+"{::creatures::name::singular} " = "{::creatures::name::singular}"
+
+[[rulesets]]
+name = "singular::main"
+[rulesets.rules]
+"{::materials::state}" = "{::materials::state}"
+"meat" = "肉"
+"eye" = "眼"
+"brain" = "脑"
+"lung" = "肺"
+"heart" = "心脏"
+"liver" = "肝脏"
+"intestines" = "肠"
+"tripe" = "肚"
+"gizzard" = "砂囊"
+"sweetbread" = "胸腺"
+"spleen" = "脾"
+"kidney" = "肾"
+
+[[rulesets]]
+name = "plural::main"
+[rulesets.rules]
+"{::materials::state}" = "{::materials::state}"
+"meat" = "肉"
+"eye" = "眼"
+"brain" = "脑"
+"lung" = "肺"
+"heart" = "心脏"
+"liver" = "肝脏"
+"intestines" = "肠"
+"tripe" = "肚"
+"gizzard" = "砂囊"
+"sweetbread" = "胸腺"
+"spleen" = "脾"
+"kidney" = "肾"

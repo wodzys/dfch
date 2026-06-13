@@ -1,0 +1,6 @@
+base = "items::food"
+
+[[rulesets]]
+[rulesets.rules]
+"prepared meal" = "预备的餐点"
+"prepared meals" = "预备的餐点"

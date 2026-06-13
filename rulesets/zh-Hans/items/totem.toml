@@ -1,0 +1,6 @@
+base = "items::totem"
+
+[[rulesets]]
+[rulesets.rules]
+"totem" = "图腾"
+"totems" = "图腾"

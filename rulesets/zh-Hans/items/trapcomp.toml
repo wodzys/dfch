@@ -1,0 +1,68 @@
+base = "items::trapcomp"
+
+[[rulesets]]
+[rulesets.rules]
+"{default}" = "{default}"
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "default"
+[rulesets.rules]
+"{default::^0}{default::main}" = "{default::^0}{default::main}"
+
+[[rulesets]]
+name = "default::^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "default::main"
+[rulesets.rules]
+"trap component" = "陷阱组件"
+"trap components" = "陷阱组件"
+
+[[rulesets]]
+name = "^prefix"
+optional = true
+[rulesets.rules]
+"giant " = "巨型"
+"enormous " = "大号"
+"spiked " = "尖刺"
+"large, serrated " = "大型"
+"menacing " = "险恶"
+
+[[rulesets]]
+name = "^material"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{^prefix}{^material}{singular::main}" = "{^prefix}{^material}{singular::main}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{^prefix}{^material}{plural::main}" = "{^prefix}{^material}{plural::main}"
+
+[[rulesets]]
+name = "singular::main"
+[rulesets.rules]
+"axe blade" = "斧刃"
+"corkscrew" = "螺杆"
+"ball" = "圆球"
+"disc" = "锯盘"
+"spike" = "尖刺"
+
+[[rulesets]]
+name = "plural::main"
+[rulesets.rules]
+"axe blades" = "斧刃"
+"corkscrews" = "螺杆"
+"balls" = "圆球"
+"discs" = "锯盘"
+"spikes" = "尖刺"

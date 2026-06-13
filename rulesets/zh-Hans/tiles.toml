@@ -1,0 +1,324 @@
+base = "tiles"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{^1}{^2}{^3}{^4}{main}" = "{^0}{^1}{^2}{^3}{^4}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"Warm " = "温暖"
+
+[[rulesets]]
+name = "^1"
+optional = true
+[rulesets.rules]
+"Damp " = "潮湿"
+
+[[rulesets]]
+name = "^2"
+optional = true
+[rulesets.rules]
+"Muddy " = "泥泞"
+
+[[rulesets]]
+name = "^3"
+optional = true
+[rulesets.rules]
+"Snow-covered " = "雪覆"
+
+[[rulesets]]
+name = "^4"
+optional = true
+[rulesets.rules]
+"Mossy " = "生苔"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"Murky Pool" = "泥塘"
+"Murky Pool Slope" = "泥塘斜坡"
+"Underworld Gate" = "冥界之门"
+"Driftwood" = "浮木"
+"Open Space" = "开放空间"
+"Chasm" = "裂口"
+"Eerie Glowing Pit" = "诡异发光的深坑"
+"Ashes" = "灰烬"
+"Waterfall" = "瀑布"
+"River Source" = "河源"
+"Ice" = "冰"
+"Semi-molten Rock" = "半熔的岩石"
+"Lava Flow" = "熔岩流"
+"Magma Flow" = "未凝熔岩"
+"Glowing Barrier" = "发光的屏障"
+"Glowing Floor" = "发光的地板"
+"River" = "河流"
+"Brook" = "溪流"
+"Furrowed {::materials}" = "沟壑纵横的{::materials}"
+"{::materials} Boulder" = "{::materials}巨石"
+"{::materials} Pebbles" = "{::materials}砾石地面"
+"{plants}" = "{plants}"
+"{floors}" = "{floors}"
+"{stairways}" = "{stairways}"
+"{slopes}" = "{slopes}"
+"{walls}" = "{walls}"
+"{pillar_fortifications}" = "{pillar_fortifications}"
+"{tracks}" = "{tracks}"
+
+[[rulesets]]
+name = "plants"
+[rulesets.rules]
+"{prefix::may_dead}Tree" = "{prefix::may_dead}树"
+"{prefix::may_dead}Shrub" = "{prefix::may_dead}灌木"
+"{prefix::may_dead}Sapling" = "{prefix::may_dead}树苗"
+"{prefix::may_dead}{plants::tile}" = "{prefix::may_dead}{plants::tile}"
+"{prefix::may_dead}Young {plants::tile}" = "{prefix::may_dead}幼体{plants::tile}"
+"{prefix::may_dead}{plants::tile} Sapling" = "{prefix::may_dead}{plants::tile}树苗"
+"{prefix::may_dead_dry}Grass" = "{prefix::may_dead_dry}草"
+"{prefix::may_sparse_dense}{prefix::may_dead_dry}{plants::tile}" = "{prefix::may_sparse_dense}{prefix::may_dead_dry}{plants::tile}"
+"{::plants::growth::plural}" = "{::plants::growth::plural}"
+
+[[rulesets]]
+name = "plants::tile"
+[rulesets.rules]
+"{::plants::name::plural}" = "{::plants::name::plural}"
+"{::plants::name::singular}" = "{::plants::name::singular}"
+"{::plants::name::singular} roots" = "{::plants::name::singular}根"
+"{::plants::name::singular} trunk" = "{::plants::name::singular}干"
+"thick {::plants::name::singular} branches" = "{::plants::name::singular}粗枝"
+"{::plants::name::singular} branches" = "{::plants::name::singular}树枝"
+"{::plants::name::singular} twigs" = "{::plants::name::singular}细枝"
+"{::plants::name::singular} cap" = "{::plants::name::singular}冠"
+
+[[rulesets]]
+name = "floors"
+[rulesets.rules]
+"{prefix::may_smooth_detailed}{::materials}" = "{prefix::may_smooth_detailed}{::materials}"
+"{prefix::may_smooth_detailed}{::materials} Floor" = "{prefix::may_smooth_detailed}{::materials}地板"
+"Sculpted Ice Floor" = "浮刻装饰的冰地板"
+"Level Ice Floor" = "平整的冰地板"
+"{::materials} Cavern Floor" = "{::materials}洞窟地板"
+"Wet {::materials} Cavern Floor" = "湿润{::materials}洞窟地板"
+"Wet {::materials}" = "湿润{::materials}"
+"{constructed} Floor" = "{constructed}地板"
+
+[[rulesets]]
+name = "stairways"
+[rulesets.rules]
+"{prefix::updownboth} Stairway" = "{prefix::updownboth}楼梯"
+"Grassy" = "被草覆盖的"
+"{prefix::may_sparse_dense}{::plants::name::adjective}" = "{prefix::may_sparse_dense}{::plants::name::adjective}"
+"{constructed}" = "{constructed}"
+
+[[rulesets]]
+name = "slopes"
+[rulesets.rules]
+"{slopes::^0}{slopes::main}{slopes::$0}" = "{slopes::^0}{slopes::main}{slopes::$0}"
+
+[[rulesets]]
+name = "slopes::^0"
+[rulesets.rules]
+"{prefix::may_unusable}" = "{prefix::may_unusable}"
+
+[[rulesets]]
+name = "slopes::main"
+optional = true
+[rulesets.rules]
+"Glacial" = "冰川"
+"Grassy" = "被草覆盖的"
+"{prefix::may_dead_dry} Grass" = "{prefix::may_dead_dry}草壤"
+"{prefix::may_sparse_dense}{prefix::may_dead_dry}{::plants::name::adjective}" = "{prefix::may_sparse_dense}{prefix::may_dead_dry}{::plants::name::adjective}"
+"{constructed}" = "{constructed}"
+
+[[rulesets]]
+name = "slopes::$0"
+[rulesets.rules]
+" {prefix::updown} Slope" = "{prefix::updown}斜坡"
+
+[[rulesets]]
+name = "walls"
+[rulesets.rules]
+"{walls::^0}{walls::main}{walls::$0}" = "{walls::^0}{walls::main}{walls::$0}"
+
+[[rulesets]]
+name = "walls::^0"
+optional = true
+[rulesets.rules]
+"Smooth " = "光滑"
+"Rough-hewn " = "粗糙"
+"Straight " = "平滑"
+"{prefix::may_engrave} " = "{prefix::may_engrave}"
+
+[[rulesets]]
+name = "walls::main"
+[rulesets.rules]
+"{constructed}" = "{constructed}"
+
+[[rulesets]]
+name = "walls::$0"
+[rulesets.rules]
+" Wall" = "墙体"
+" Cluster" = "矿簇"
+
+[[rulesets]]
+name = "pillar_fortifications"
+[rulesets.rules]
+"{pillar_fortifications::^0}{pillar_fortifications::^1}{pillar_fortifications::main}{pillar_fortifications::$0}" = "{pillar_fortifications::^0}{pillar_fortifications::^1}{pillar_fortifications::main}{pillar_fortifications::$0}"
+
+[[rulesets]]
+name = "pillar_fortifications::^0"
+optional = true
+[rulesets.rules]
+"Exposed " = "裸露"
+"{prefix::may_engrave} " = "{prefix::may_engrave}"
+
+[[rulesets]]
+name = "pillar_fortifications::^1"
+optional = true
+[rulesets.rules]
+"{pillar_fortifications::^1::prefix}reinforced " = "{pillar_fortifications::^1::prefix}加固的"
+
+[[rulesets]]
+name = "pillar_fortifications::^1::prefix"
+optional = true
+[rulesets.rules]
+"{::materials}-" = "{::materials}-"
+
+[[rulesets]]
+name = "pillar_fortifications::main"
+[rulesets.rules]
+"{constructed}" = "{constructed}"
+
+[[rulesets]]
+name = "pillar_fortifications::$0"
+[rulesets.rules] 
+" Fortification" = "垛墙"
+" Pillar" = "柱子"
+
+[[rulesets]]
+name = "tracks"
+[rulesets.rules]
+"{tracks::main}{tracks::$0}" = "{tracks::main}{tracks::$0}"
+
+[[rulesets]]
+name = "tracks::main"
+[rulesets.rules]
+"{constructed} Track" = "{constructed}轨道"
+"{prefix::may_unusable}{constructed} {prefix::updown} Track" = "{prefix::may_unusable}{constructed}{prefix::updown}轨道"
+
+[[rulesets]]
+name = "tracks::$0"
+[rulesets.rules]
+"(N)" = "(N)"
+"(S)" = "(S)"
+"(E)" = "(E)"
+"(W)" = "(W)"
+"(NS)" = "(NS)"
+"(NE)" = "(NE)"
+"(NW)" = "(NW)"
+"(SE)" = "(SE)"
+"(SW)" = "(SW)"
+"(EW)" = "(EW)"
+"(NSE)" = "(NSE)"
+"(NSW)" = "(NSW)"
+"(NEW)" = "(NEW)"
+"(SEW)" = "(SEW)"
+"(NSEW)" = "(NSEW)"
+
+[[rulesets]]
+name = "prefix::may_dead"
+optional = true
+[rulesets.rules]
+"Dead " = "枯萎"
+
+[[rulesets]]
+name = "prefix::may_dead_dry"
+[rulesets.rules]
+"Dry " = "干枯"
+"{prefix::may_dead}" = "{prefix::may_dead}"
+
+[[rulesets]]
+name = "prefix::may_sparse_dense"
+optional = true
+[rulesets.rules]
+"Sparse " = "稀疏"
+"Dense " = "茂密"
+
+[[rulesets]]
+name = "prefix::may_smooth_detailed"
+optional = true
+[rulesets.rules]
+"Smooth " = "光滑"
+"{prefix::detailed} " = "{prefix::detailed}"
+
+[[rulesets]]
+name = "prefix::may_engrave"
+optional = true
+[rulesets.rules]
+"{prefix::detailed} " = "{prefix::detailed}"
+"{prefix::sculpted} " = "{prefix::sculpted}"
+
+[[rulesets]]
+name = "prefix::may_unusable"
+optional = true
+[rulesets.rules]
+"Unusable " = "无效"
+
+[[rulesets]]
+name = "prefix::detailed"
+[rulesets.rules]
+"Detailed" = "雕刻装饰的"
+"-Detailed-" = "-雕刻装饰-的"
+"+Detailed+" = "+雕刻装饰+的"
+"*Detailed*" = "*雕刻装饰*的"
+"≡Detailed≡" = "≡雕刻装饰≡的"
+"☼Detailed☼" = "☼雕刻装饰☼的"
+
+[[rulesets]]
+name = "prefix::sculpted"
+[rulesets.rules]
+"Sculpted" = "浮刻装饰的"
+"-Sculpted-" = "-浮刻装饰-的"
+"+Sculpted+" = "+浮刻装饰+的"
+"*Sculpted*" = "*浮刻装饰*的"
+"≡Sculpted≡" = "≡浮刻装饰≡的"
+"☼Sculpted☼" = "☼浮刻装饰☼的"
+
+[[rulesets]]
+name = "prefix::updownboth"
+[rulesets.rules]
+"Up/Down" = "上/下行"
+"{prefix::updown}" = "{prefix::updown}"
+
+[[rulesets]]
+name = "prefix::updown"
+[rulesets.rules]
+"Upward" = "上行"
+"Downward" = "下行"
+
+[[rulesets]]
+name = "constructed"
+[rulesets.rules]
+"{constructed::^0}{constructed::main}{constructed::$0}" = "{constructed::^0}{constructed::main}{constructed::$0}"
+
+[[rulesets]]
+name = "constructed::^0"
+optional = true
+[rulesets.rules]
+"rough " = "粗糙"
+"shoddy" = "劣质"
+
+[[rulesets]]
+name = "constructed::main"
+[rulesets.rules]
+"unknown material" = "未知物质"
+"{::materials::state::adjective}" = "{::materials::state::adjective}"
+"{::materials::^prefix}{::materials::state::adjective}" = "{::materials::^prefix}{::materials::state::adjective}"
+
+[[rulesets]]
+name = "constructed::$0"
+optional = true
+[rulesets.rules]
+" block" = "方块"
+" log" = "原木"

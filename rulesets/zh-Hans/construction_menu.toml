@@ -1,0 +1,175 @@
+base = "construction_menu"
+
+[[rulesets]]
+[rulesets.rules]
+"{main}" = "{main}"
+"{workshops}" = "{workshops}"
+"{workshops_furnaces}" = "{workshops_furnaces}"
+"{workshops_clothing}" = "{workshops_clothing}"
+"{workshops_farming}" = "{workshops_farming}"
+"{furniture}" = "{furniture}"
+"{doors_hatches}" = "{doors_hatches}"
+"{walls_floors}" = "{walls_floors}"
+"{machines_fluids}" = "{machines_fluids}"
+"{cages_restraints}" = "{cages_restraints}"
+"{traps}" = "{traps}"
+"{military}" = "{military}"
+"{singular}" = "{singular}"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"Trap" = "陷阱"
+"Furnace" = "火炉"
+"Workshop" = "工坊"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"Workshops" = "工坊"
+"Furniture" = "家具"
+"Doors/hatches" = "房门/活盖"
+"Constructions" = "构筑"
+"Machines/fluids" = "机械/流体"
+"Cages/restraints" = "笼子/拘束装置"
+"Traps" = "陷阱"
+"Military" = "军事"
+"Trade depot" = "贸易站"
+
+[[rulesets]]
+name = "workshops"
+[rulesets.rules]
+"Clothing and leather" = "布料与皮革"
+"Farming" = "农业"
+"Furnaces" = "火炉"
+"Ashery" = "堆灰场"
+"Bowyer" = "弩匠"
+"Carpenter" = "木匠"
+"Crafts" = "工匠"
+"Jeweler" = "珠宝匠"
+"Magma forge" = "岩浆锻造间"
+"Mechanic" = "机械师"
+"Metalsmith" = "锻造间"
+"Siege" = "攻城"
+"Stoneworker" = "石材工人"
+"Soap Maker's Workshop" = "皂匠工坊"
+"Screw Press" = "螺旋压榨机"
+
+[[rulesets]]
+name = "workshops_furnaces"
+[rulesets.rules]
+"Glass furnace" = "玻璃窑"
+"Kiln" = "窑炉"
+"Magma glass furnace" = "岩浆玻璃窑"
+"Magma kiln" = "岩浆窑炉"
+"Magma smelter" = "岩浆熔炼炉"
+"Smelter" = "熔炼炉"
+"Wood furnace" = "烧炭炉"
+
+[[rulesets]]
+name = "workshops_clothing"
+[rulesets.rules]
+"Leather" = "皮革"
+"Loom" = "织布机"
+"Clothes" = "服装"
+"Dyer" = "染工"
+
+[[rulesets]]
+name = "workshops_farming"
+[rulesets.rules]
+"Farm plot" = "耕地"
+"Still" = "蒸馏器"
+"Butcher" = "屠夫"
+"Tanner" = "制革工"
+"Fishery" = "渔场"
+"Kitchen" = "厨房"
+"Farmer" = "农夫"
+"Quern" = "手推磨"
+"Vermin Catcher's Shop" = "小动物驯捕坊"
+"Nest box" = "巢箱"
+"Hive" = "蜂箱"
+
+[[rulesets]]
+name = "furniture"
+[rulesets.rules]
+"Bed" = "床"
+"Chair" = "座椅"
+"Table" = "桌子"
+"Chest" = "箱子"
+"Cabinet" = "柜子"
+"Burial" = "葬地"
+"Slab" = "石板"
+"Statue" = "雕像"
+"Traction bench" = "牵引台"
+"Bookcase" = "书架"
+"Display" = "展示"
+"Offering place" = "供奉处"
+"Instrument" = "乐器"
+
+[[rulesets]]
+name = "doors_hatches"
+[rulesets.rules]
+"Door" = "房门"
+"Hatch" = "活盖"
+
+[[rulesets]]
+name = "walls_floors"
+[rulesets.rules]
+"Wall" = "墙体"
+"Floor" = "楼板"
+"Ramp" = "斜坡"
+"Stairs" = "楼梯"
+"Bridge" = "桥"
+"Paved road" = "铺砌路"
+"Dirt road" = "土路"
+"Fortification" = "垛墙"
+"Wall grate" = "墙体格栅"
+"Floor grate" = "楼板格栅"
+"Vertical bars" = "垂直栅栏"
+"Floor bars" = "楼板栅栏"
+"Glass window" = "玻璃窗"
+"Gem window" = "宝石窗"
+"Support" = "支柱"
+"Track" = "轨道"
+"Track stop" = "轨道站点"
+
+[[rulesets]]
+name = "machines_fluids"
+[rulesets.rules]
+"Lever" = "拉杆"
+"Well" = "水井"
+"Floodgate" = "闸门"
+"Screw pump" = "螺杆泵"
+"Water wheel" = "水车"
+"Windmill" = "风车"
+"Gear assembly" = "齿轮组"
+"Horizontal axle" = "横向传动轴"
+"Vertical axle" = "垂直传动轴"
+"Millstone" = "磨石"
+"Rollers" = "滚链"
+
+[[rulesets]]
+name = "cages_restraints"
+[rulesets.rules]
+"Rope/chain" = "绳索/链条"
+"Cage" = "笼子"
+"Animal trap" = "动物陷阱"
+
+[[rulesets]]
+name = "traps"
+[rulesets.rules]
+"Pressure plate" = "压力板"
+"Stone-fall" = "落石"
+"Weapon" = "武器"
+"Cage" = "笼子"
+"Upright weapon/spike" = "直立武器/尖刺"
+
+[[rulesets]]
+name = "military"
+[rulesets.rules]
+"Archery target" = "箭靶"
+"Weapon rack" = "武器支架"
+"Armor stand" = "盔甲支架"
+"Ballista" = "弩炮"
+"Catapult" = "投石机"
+"Bolt thrower" = "弩箭投射器"

@@ -1,0 +1,7 @@
+base = "items::vermin"
+
+[[rulesets]]
+[rulesets.rules]
+"small live animal" = "活的小动物"
+"small live animals" = "活的小动物"
+"live {::creatures::caste::singular}" = "活{::creatures::caste::singular}"

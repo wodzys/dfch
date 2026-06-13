@@ -1,0 +1,17 @@
+base = "items::quern"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{main}" = "{^0}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"quern" = "手推磨"
+"querns" = "手推磨"

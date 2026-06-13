@@ -1,0 +1,107 @@
+base = "items::weapon"
+
+[[rulesets]]
+[rulesets.rules]
+"{default}" = "{default}"
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "default"
+[rulesets.rules]
+"{default::^0}{default::main}" = "{default::^0}{default::main}"
+
+[[rulesets]]
+name = "default::^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "default::main"
+[rulesets.rules]
+"weapon" = "武器"
+"weapons" = "武器"
+
+[[rulesets]]
+name = "prefix"
+[rulesets.rules]
+"large " = "大"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{^0}{^1}{singular::main}" = "{^0}{^1}{singular::main}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{^0}{^1}{plural::main}" = "{^0}{^1}{plural::main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{prefix} " = "{prefix}"
+
+[[rulesets]]
+name = "^1"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "singular::main"
+[rulesets.rules]
+"whip" = "长鞭"
+"battle axe" = "战斧"
+"war hammer" = "战锤"
+"short sword" = "短剑"
+"spear" = "矛"
+"mace" = "页锤"
+"crossbow" = "十字弩"
+"pick" = "鹤嘴锄"
+"bow" = "弓"
+"blowgun" = "吹管"
+"pike" = "长枪"
+"halberd" = "斧枪"
+"two-handed sword" = "双手剑"
+"long sword" = "长剑"
+"maul" = "大锤"
+"great axe" = "巨斧"
+"dagger" = "刺剑"
+"scourge" = "散鞭"
+"flail" = "连枷"
+"morningstar" = "钉头锤"
+"scimitar" = "短弯刀"
+"training axe" = "训练斧"
+"training sword" = "训练剑"
+"training spear" = "训练矛"
+
+[[rulesets]]
+name = "plural::main"
+[rulesets.rules]
+"whips" = "长鞭"
+"battle axes" = "战斧"
+"war hammers" = "战锤"
+"short swords" = "短剑"
+"spears" = "矛"
+"maces" = "页锤"
+"crossbows" = "十字弩"
+"picks" = "鹤嘴锄"
+"bows" = "弓"
+"blowguns" = "吹管"
+"pikes" = "长枪"
+"halberds" = "斧枪"
+"two-handed swords" = "双手剑"
+"long swords" = "长剑"
+"mauls" = "大锤"
+"great axes" = "巨斧"
+"daggers" = "刺剑"
+"scourges" = "散鞭"
+"flails" = "连枷"
+"morningstars" = "钉头锤"
+"scimitars" = "短弯刀"
+"training axes" = "训练斧"
+"training swords" = "训练剑"
+"training spears" = "训练矛"

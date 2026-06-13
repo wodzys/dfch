@@ -1,0 +1,21 @@
+base = "menu"
+
+[[rulesets]]
+[rulesets.rules]
+"{main}{&0}" = "{main}{&0}"
+
+[[rulesets]]
+name = "&0"
+optional = true
+[rulesets.rules]
+" (opens menu)" = " (打开菜单)"
+" (use bars)" = " (使用锭)"
+" (use ore)" = " (使用矿石)"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"{dyer}" = "{dyer}"
+"{make}" = "{make}"
+"{smelt}" = "{smelt}"
+"{kiln}" = "{kiln}"

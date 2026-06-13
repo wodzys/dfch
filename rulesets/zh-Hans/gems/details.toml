@@ -1,0 +1,219 @@
+base = "gems::details"
+
+[[rulesets]]
+[rulesets.rules]
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{singular::noun}" = "{singular::noun}"
+"{singular::adjective_noun}" = "{singular::adjective_noun}"
+"{singular::adjective}" = "{singular::adjective}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{plural::noun}" = "{plural::noun}"
+"{plural::adjective_noun}" = "{plural::adjective_noun}"
+"{plural::adjective}" = "{plural::adjective}"
+
+[[rulesets]]
+name = "singular::noun"
+[rulesets.rules]
+"{singular::noun::^0}{singular::noun::main}" = "{singular::noun::^0}{singular::noun::main}"
+
+[[rulesets]]
+name = "singular::noun::^0"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "singular::noun::main"
+[rulesets.rules]
+"{shapes::noun::singular}" = "{shapes::noun::singular}"
+
+[[rulesets]]
+name = "singular::adjective_noun"
+[rulesets.rules]
+"{singular::adjective_noun::^0}{singular::adjective_noun::^1}{singular::adjective_noun::main}" = "{singular::adjective_noun::^0}{singular::adjective_noun::^1}{singular::adjective_noun::main}"
+
+[[rulesets]]
+name = "singular::adjective_noun::^0"
+optional = true
+[rulesets.rules]
+"{shapes::adjective_noun::prefix} " = "{shapes::adjective_noun::prefix}"
+
+[[rulesets]]
+name = "singular::adjective_noun::^1"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "singular::adjective_noun::main"
+[rulesets.rules]
+"{shapes::adjective_noun::singular}" = "{shapes::adjective_noun::singular}"
+
+[[rulesets]]
+name = "singular::adjective"
+[rulesets.rules]
+"{singular::adjective::^0}{singular::adjective::^1}{singular::adjective::main}" = "{singular::adjective::^0}{singular::adjective::^1}{singular::adjective::main}"
+
+[[rulesets]]
+name = "singular::adjective::^0"
+optional = true
+[rulesets.rules]
+"{shapes::adjective::prefix} " = "{shapes::adjective::prefix}"
+
+[[rulesets]]
+name = "singular::adjective::^1"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "singular::adjective::main"
+[rulesets.rules]
+"{shapes::adjective::singular}" = "{shapes::adjective::singular}"
+"{::gems::singular}" = "{::gems::singular}"
+
+[[rulesets]]
+name = "plural::noun"
+[rulesets.rules]
+"{plural::noun::^0}{plural::noun::main}" = "{plural::noun::^0}{plural::noun::main}"
+
+[[rulesets]]
+name = "plural::noun::^0"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "plural::noun::main"
+[rulesets.rules]
+"{shapes::noun::plural}" = "{shapes::noun::plural}"
+
+[[rulesets]]
+name = "plural::adjective_noun"
+[rulesets.rules]
+"{plural::adjective_noun::^0}{plural::adjective_noun::^1}{plural::adjective_noun::main}" = "{plural::adjective_noun::^0}{plural::adjective_noun::^1}{plural::adjective_noun::main}"
+
+[[rulesets]]
+name = "plural::adjective_noun::^0"
+optional = true
+[rulesets.rules]
+"{shapes::adjective_noun::prefix} " = "{shapes::adjective_noun::prefix}"
+
+[[rulesets]]
+name = "plural::adjective_noun::^1"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "plural::adjective_noun::main"
+[rulesets.rules]
+"{shapes::adjective_noun::plural}" = "{shapes::adjective_noun::plural}"
+
+[[rulesets]]
+name = "plural::adjective"
+[rulesets.rules]
+"{plural::adjective::^0}{plural::adjective::^1}{plural::adjective::main}" = "{plural::adjective::^0}{plural::adjective::^1}{plural::adjective::main}"
+
+[[rulesets]]
+name = "plural::adjective::^0"
+optional = true
+[rulesets.rules]
+"{shapes::adjective::prefix} " = "{shapes::adjective::prefix}"
+
+[[rulesets]]
+name = "plural::adjective::^1"
+optional = true
+[rulesets.rules]
+"{materials} " = "{materials}"
+
+[[rulesets]]
+name = "plural::adjective::main"
+[rulesets.rules]
+"{shapes::adjective::plural}" = "{shapes::adjective::plural}"
+"{::gems::plural}" = "{::gems::plural}"
+
+[[rulesets]]
+name = "materials"
+[rulesets.rules]
+"{materials::glasses}" = "{materials::glasses}"
+"{::gems::singular}" = "{::gems::singular}"
+
+[[rulesets]]
+name = "materials::glasses"
+
+[rulesets.rules]
+"green glass" = "绿玻璃"
+"clear glass" = "透明玻璃"
+"crystal glass" = "水晶玻璃"
+
+[[rulesets]]
+name = "shapes::noun::singular"
+[rulesets.rules]
+"gizzard stone" = "砂囊石"
+
+[[rulesets]]
+name = "shapes::noun::plural"
+[rulesets.rules]
+"gizzard stones" = "砂囊石"
+
+[[rulesets]]
+name = "shapes::adjective_noun::prefix"
+[rulesets.rules]
+"smooth" = "光滑"
+"oval" = "椭圆形"
+"round" = "圆形"
+"cushion" = "垫形"
+"rectangular" = "长方形"
+
+[[rulesets]]
+name = "shapes::adjective_noun::singular"
+[rulesets.rules]
+"pebble" = "卵石形"
+"cabochon" = "弧面切工"
+
+[[rulesets]]
+name = "shapes::adjective_noun::plural"
+[rulesets.rules]
+"pebbles" = "卵石形"
+"cabochons" = "弧面切工"
+
+[[rulesets]]
+name = "shapes::adjective::prefix"
+[rulesets.rules]
+"point cut" = "尖切工"
+"table cut" = "桌形切工"
+"single cut" = "单多面形切工"
+"rose cut" = "玫瑰花切工"
+"briolette cut" = "水滴形切工"
+"emerald cut" = "祖母绿切工"
+"marquise cut" = "榄尖切工"
+"oval cut" = "椭圆切工"
+"pear cut" = "梨形切工"
+"square brilliant cut" = "方形明亮式切工"
+"radiant cut" = "雷迪恩切工"
+"trillion cut" = "三角形切工"
+"round brilliant cut" = "圆形明亮式切工"
+"baguette cut" = "长阶梯式切工"
+"tapered baguette cut" = "尖阶梯式切工"
+"cushion cut" = "枕形切工"
+"octagon cut" = "八角形切工"
+"square cut" = "方形切工"
+
+[[rulesets]]
+name = "shapes::adjective::singular"
+[rulesets.rules]
+"gem" = "宝石"
+
+[[rulesets]]
+name = "shapes::adjective::plural"
+[rulesets.rules]
+"gems" = "宝石"

@@ -1,0 +1,16 @@
+base = "items::sheet"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{main}" = "{^0}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"sheet" = "纸类"

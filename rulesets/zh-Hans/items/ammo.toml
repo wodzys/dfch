@@ -1,0 +1,53 @@
+base = "items::ammo"
+
+[[rulesets]]
+[rulesets.rules]
+"{default}" = "{default}"
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "default"
+[rulesets.rules]
+"{default::^0}{default::main}" = "{default::^0}{default::main}"
+
+[[rulesets]]
+name = "default::^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "default::main"
+[rulesets.rules]
+"ammunition" = "弹药"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{^material}{singular::main}" = "{^material}{singular::main}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{^material}{plural::main}" = "{^material}{plural::main}"
+
+[[rulesets]]
+name = "^material"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "singular::main"
+[rulesets.rules]
+"bolt" = "弩矢"
+"arrow" = "弓箭"
+"blowdart" = "吹箭"
+
+[[rulesets]]
+name = "plural::main"
+[rulesets.rules]
+"bolts" = "弩矢"
+"arrows" = "弓箭"
+"blowdarts" = "吹箭"

@@ -1,0 +1,19 @@
+base = "materials"
+
+[[rulesets]]
+[rulesets.rules]
+"{^prefix}{state}" = "{^prefix}{state}"
+"{job}" = "{job}"
+
+[[rulesets]]
+name = "^prefix"
+optional = true
+[rulesets.rules]
+"{::plants::name::singular} " = "{::plants::name::singular}"
+"{::creatures::name::singular} " = "{::creatures::name::singular}"
+
+[[rulesets]]
+name = "adjective"
+[rulesets.rules]
+"{^prefix}{state::adjective}" = "{^prefix}{state::adjective}"
+"{job::adjective}" = "{job::adjective}"

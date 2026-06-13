@@ -1,0 +1,20 @@
+base = "workshop"
+
+[[rulesets]]
+[rulesets.rules]
+"{name}" = "{name}"
+
+[[rulesets]]
+name = "name"
+[rulesets.rules]
+"Metalsmith's Forge" = "锻造间"
+"stoneworker's Workshop" = "石匠工坊"
+"bowyer's workshop" = "弓弩匠工坊"
+"siege workshop" = "攻城器工坊"
+"Clothier's shop" = "裁缝铺"
+"Dyer's shop" = "染坊"
+"Butcher's shop" = "屠宰场"
+"Tanner's shop" = "制革作坊"
+"Jeweler's workshop" = "珠宝工坊"
+"Craftsdwarf's Workshop" = "手艺工坊"
+"Carpenter's Workshop" = "木匠工坊"

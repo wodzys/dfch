@@ -1,0 +1,40 @@
+base = "items::liquid_glob"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{^1}{main}{$0}" = "{^0}{^1}{main}{$0}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"rotten " = "变质的"
+
+[[rulesets]]
+name = "^1"
+optional = true
+[rulesets.rules]
+"filthy " = "骯髒的"
+"sticky " = "黏稠的"
+"vomitous " = "令人作呕的"
+"slimy " = "黏糊糊的"
+"stagnant " = "停滞的"
+"dirty " = "肮脏的"
+"gooey " = "黏糊糊的"
+"purulent " = "化脓的"
+"ichorous " = "脓液状的"
+"bloody " = "血腥的"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"liquid" = "液体"
+"glob" = "软团"
+"{::creatures::caste::singular} paste" = "{::creatures::caste::singular}浆糊"
+"{::materials}" = "{::materials}"
+
+[[rulesets]]
+name = "$0"
+optional = true
+[rulesets.rules]
+" laced with {::materials}" = "夹杂着{::materials}"

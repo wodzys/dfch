@@ -1,0 +1,16 @@
+base = "items::cloth"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{main}" = "{^0}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"cloth" = "布料"

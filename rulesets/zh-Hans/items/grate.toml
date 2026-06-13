@@ -1,0 +1,19 @@
+base = "items::grate"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{main}" = "{^0}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"floor grate" = "楼板格栅"
+"wall grate" = "墙体格栅"
+"grate" = "格栅"
+"grates" = "格栅"

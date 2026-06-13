@@ -1,0 +1,21 @@
+base = "positions::forest"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"acolyte" = "侍僧"
+"diplomat" = "外交官"
+"druid" = "德鲁伊"
+"princess" = "公主"
+"queen" = "女王"
+"ranger captain" = "游侠队长"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"acolytes" = "侍僧"
+"diplomats" = "外交官"
+"druids" = "德鲁伊"
+"princesses" = "公主"
+"queens" = "女王"
+"ranger captains" = "游侠队长"

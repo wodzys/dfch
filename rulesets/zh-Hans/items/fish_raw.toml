@@ -1,0 +1,24 @@
+base = "items::fish_raw"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{^1}{main}" = "{^0}{^1}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"rotten " = "腐烂的"
+
+[[rulesets]]
+name = "^1"
+[rulesets.rules]
+"raw " = "未处理的"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"fish" = "鱼"
+"{::creatures::caste::singular}" = "{::creatures::caste::singular}"
+"{::creatures::caste::singular}, ♀" = "{::creatures::caste::singular}, ♀"
+"{::creatures::caste::singular}, ♂" = "{::creatures::caste::singular}, ♂"

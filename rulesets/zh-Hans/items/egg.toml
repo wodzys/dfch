@@ -1,0 +1,22 @@
+base = "items::egg"
+
+[[rulesets]]
+[rulesets.rules]
+"{^0}{^1}{main}" = "{^0}{^1}{main}"
+
+[[rulesets]]
+name = "^0"
+optional = true
+[rulesets.rules]
+"rotten " = "腐烂的"
+
+[[rulesets]]
+name = "^1"
+optional = true
+[rulesets.rules]
+"{::creatures::caste::singular} " = "{::creatures::caste::singular}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"egg" = "蛋"

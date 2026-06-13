@@ -1,0 +1,18 @@
+base = "positions"
+
+[[rulesets]]
+[rulesets.rules]
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{mountain::singular}" = "{mountain::singular}"
+"{forest::singular}" = "{forest::singular}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{mountain::plural}" = "{mountain::plural}"
+"{forest::plural}" = "{forest::plural}"

@@ -1,0 +1,22 @@
+base = "items::bar"
+
+[[rulesets]]
+[rulesets.rules]
+"bars" = "条锭"
+"{::materials}" = "{::materials}"
+"{inorganic}" = "{inorganic}"
+"{coal}" = "{coal}"
+
+[[rulesets]]
+name = "inorganic"
+[rulesets.rules]
+"metal bars" = "金属锭"
+"{::materials} bars" = "{::materials}锭"
+"{::materials} wafers" = "{::materials}薄片"
+
+[[rulesets]]
+name = "coal"
+[rulesets.rules]
+"charcoal" = "木炭"
+"coke" = "焦炭"
+"refined coal" = "精炼煤"

@@ -1,0 +1,6 @@
+base = "items::wood"
+
+[[rulesets]]
+[rulesets.rules]
+"logs" = "原木"
+"{::materials} logs" = "{::materials}原木"

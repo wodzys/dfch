@@ -1,0 +1,95 @@
+base = "items::armor"
+
+[[rulesets]]
+[rulesets.rules]
+"{::items::prefix::maybe_equipment_size}{main}" = "{::items::prefix::maybe_equipment_size}{main}"
+
+[[rulesets]]
+name = "main"
+[rulesets.rules]
+"{default}" = "{default}"
+"{singular}" = "{singular}"
+"{plural}" = "{plural}"
+
+[[rulesets]]
+name = "default"
+[rulesets.rules]
+"{default::^0}{default::^1}{default::main}" = "{default::^0}{default::^1}{default::main}"
+
+[[rulesets]]
+name = "default::^0"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+
+[[rulesets]]
+name = "default::^1"
+optional = true
+[rulesets.rules]
+"suits of " = ""
+
+[[rulesets]]
+name = "default::main"
+[rulesets.rules]
+"armor" = "盔甲"
+
+[[rulesets]]
+name = "singular"
+[rulesets.rules]
+"{^material}{^chain}{singular::main}" = "{^material}{^chain}{singular::main}"
+
+[[rulesets]]
+name = "plural"
+[rulesets.rules]
+"{plural::^0}{^material}{^chain}{plural::main}" = "{plural::^0}{^material}{^chain}{plural::main}"
+
+[[rulesets]]
+name = "plural::^0"
+optional = true
+[rulesets.rules]
+"suits of " = ""
+
+[[rulesets]]
+name = "^material"
+optional = true
+[rulesets.rules]
+"{::materials::adjective} " = "{::materials::adjective}"
+"leather " = "皮革"
+
+[[rulesets]]
+name = "^chain"
+optional = true
+[rulesets.rules]
+"chain " = "锁链"
+
+[[rulesets]]
+name = "singular::main"
+[rulesets.rules]
+"breastplate" = "板甲"
+"mail shirt" = "链甲"
+"armor" = "盔甲"
+"coat" = "大衣"
+"shirt" = "衬衫"
+"cloak" = "斗篷"
+"tunic" = "短袍"
+"toga" = "宽袍"
+"cape" = "披风"
+"vest" = "背心"
+"dress" = "裙装"
+"robe" = "长袍"
+
+[[rulesets]]
+name = "plural::main"
+[rulesets.rules]
+"breastplates" = "板甲"
+"mail shirts" = "链甲"
+"armor" = "盔甲"
+"coats" = "大衣"
+"shirts" = "衬衫"
+"cloaks" = "斗篷"
+"tunics" = "短袍"
+"togas" = "宽袍"
+"capes" = "披风"
+"vests" = "背心"
+"dresses" = "裙装"
+"robes" = "长袍"
