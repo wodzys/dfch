@@ -132,7 +132,7 @@ namespace Hooks {
         if(hook_func_init_done) return;
         auto start = std::chrono::high_resolution_clock::now();
 
-        LOGGERMANAGER.init(DFCH::Config::getLogFile().string());
+        LOGGERMANAGER.init(Config::getLogFile().string());
         if(!g_sdl2.loadFunc()){
             LOGGERMANAGER.getLogger()->error("Hooks::init: g_sdl2.loadFunc failed");
             return;

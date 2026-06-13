@@ -1,6 +1,7 @@
 
 #include "config.h"
 
+#include "Core.h"
 #include "Debug.h"
 #include "Error.h"
 
@@ -9,6 +10,18 @@
 namespace DFHack {
 namespace DFCH {
 namespace Config {
+
+    std::filesystem::path getDataPath() {
+        static const auto path = Core::getInstance().getHackPath() / "data" / "dfch";
+        return path;
+    }
+
+    // Returns DFHack installation directory (parent of hack/)
+    std::filesystem::path getDFHackPath() {
+        static const auto path = Core::getInstance().getHackPath().parent_path();
+        return path;
+    }
+
     std::unordered_map<std::string, std::string> loadConfigFile(const std::filesystem::path& configPath) {
         std::unordered_map<std::string, std::string> config;
         std::ifstream configFile(configPath);

@@ -53,7 +53,7 @@ namespace Hooks {
     }
 
     bool DictManager::loadDicts() {
-        auto result = loadDictFile(DFCH::Config::getDictFile("DICT_EXACT"));
+        auto result = loadDictFile(Config::getDictFile("DICT_EXACT"));
         if (result.translation.empty()) {
             LOGGERMANAGER.getLogger()->warn("Dictionary file loaded but contains no valid entries. Old dictionary retained.");
             return false;
@@ -65,7 +65,7 @@ namespace Hooks {
             dict_alignment = std::move(result.alignment);
             // dict_fuzzy remains unchanged (not loaded here)
         }
-        result = loadDictFile(DFCH::Config::getDictFile("DICT_WORD"));
+        result = loadDictFile(Config::getDictFile("DICT_WORD"));
         if (!result.translation.empty()) {
             {
                 std::unique_lock<std::shared_mutex> lock(dict_mutex_);
@@ -290,10 +290,10 @@ namespace Hooks {
 //     };
 
 // // 假设 Config 有一个方法返回字典文件列表（按优先级）
-// auto dictFileKeys = DFCH::Config::getDictFileKeys(); // returns std::vector<std::string>
+// auto dictFileKeys = Config::getDictFileKeys(); // returns std::vector<std::string>
 
 //     for (const auto& key : dictKeys) {
-//         auto result = loadDictFile(DFCH::Config::getDictFile(key));
+//         auto result = loadDictFile(Config::getDictFile(key));
 //         // 合并 exact
 //         for (auto&& [k, v] : std::move(result.exact)) {
 //             temp_exact.emplace(std::move(k), std::move(v));

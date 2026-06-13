@@ -184,7 +184,7 @@ namespace Hooks {
         memo_cache_.clear();
 
         try {
-            auto ruleset_dir = DFCH::Config::DFCH_DATA_PATH / "rulesets/zh-Hans";
+            auto ruleset_dir = Config::getDataPath() / "rulesets/zh-Hans";
             if (std::filesystem::exists(ruleset_dir)) {
                 load_from_dir(ruleset_dir);
                 LOGGERMANAGER.getLogger()->info("RulesetsManager loaded: {} rulesets", rulesets_.size());

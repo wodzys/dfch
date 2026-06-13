@@ -3,8 +3,6 @@
 #include "config.h"
 #include "logger.h"
 
-#include "Core.h"
-
 #include <cstdio>
 #include <cmath>
 #include <algorithm>
@@ -26,7 +24,7 @@ namespace Hooks {
             LOGGERMANAGER.getLogger()->error("TTFManager::init: TTFInit failed");
             return false;
         }
-        if (!LoadFont(DFCH::Config::getFontFile().string(), 20)) {
+        if (!LoadFont(Config::getFontFile().string(), 20)) {
             LOGGERMANAGER.getLogger()->error("TTFManager::init: LoadFont failed");
             return false;
         }
@@ -44,7 +42,7 @@ namespace Hooks {
         if (sdl2_ttf_handle) {
             return true;
         }
-        const std::string sdl2_ttf_dll_path = (Core::getInstance().getHackPath() / "../SDL2_ttf.dll").string();
+        const auto sdl2_ttf_dll_path = (Config::getDFHackPath() / "SDL2_ttf.dll").string();
         sdl2_ttf_handle = LoadLibrary(sdl2_ttf_dll_path.c_str());
         if (!sdl2_ttf_handle) {
             LOGGERMANAGER.getLogger()->error("LoadLibrary:{} failed: {}", sdl2_ttf_dll_path, GetLastError());
@@ -112,9 +110,9 @@ namespace Hooks {
         if (new_height_px == pre_height_px) {
             return true;
         }
-        TTF_Font* new_font = LoadFontMatchingHeight(DFCH::Config::getFontFile().string(), new_height_px);
+        TTF_Font* new_font = LoadFontMatchingHeight(Config::getFontFile().string(), new_height_px);
         if (!new_font) {
-            LOGGERMANAGER.getLogger()->error("LoadFontMatchingHeight:{} {} failed", DFCH::Config::getFontFile().string(), new_height_px);
+            LOGGERMANAGER.getLogger()->error("LoadFontMatchingHeight:{} {} failed", Config::getFontFile().string(), new_height_px);
             return false;
         }
         FreeFont();
