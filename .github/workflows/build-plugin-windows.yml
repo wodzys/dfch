@@ -7,9 +7,6 @@ jobs:
   build-win64:
     name: Build win64
     runs-on: windows-2022
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Check out plugin source
         uses: actions/checkout@v4
@@ -29,7 +26,6 @@ jobs:
 
       - name: Install vcpkg dependencies
         if: steps.vcpkg-cache.outputs.cache-hit != 'true'
-        shell: pwsh
         run: |
           vcpkg install `
             --x-manifest-root=${{ github.workspace }}/plugin/3rdParty `
@@ -47,12 +43,12 @@ jobs:
 
       - name: Look up latest DFHack release tag
         id: dfhack-tag
-        run: |
-          tag=$(gh api repos/DFHack/dfhack/releases/latest --jq .tag_name)
-          echo "tag=$tag" >> $GITHUB_OUTPUT
-          echo "Using DFHack tag: $tag"
         env:
           GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = gh api repos/DFHack/dfhack/releases/latest --jq ".tag_name"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "tag=$tag"
+          Write-Host "Using DFHack tag: $tag"
 
       - name: Clone DFHack
         uses: actions/checkout@v4
@@ -65,13 +61,11 @@ jobs:
 
       - name: Copy plugin into DFHack external plugins tree
         run: |
-          mkdir -p "${{ github.workspace }}"/dfhack/plugins/external/dfch
-          cp -a "${{ github.workspace }}"/plugin/. "${{ github.workspace }}"/dfhack/plugins/external/dfch/
-          echo "add_subdirectory(dfch)" \
-            > "${{ github.workspace }}"/dfhack/plugins/external/CMakeLists.txt
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}/dfhack/plugins/external/dfch"
+          Copy-Item -Recurse -Path "${{ github.workspace }}/plugin/*" -Destination "${{ github.workspace }}/dfhack/plugins/external/dfch/"
+          Set-Content -Path "${{ github.workspace }}/dfhack/plugins/external/CMakeLists.txt" -Value "add_subdirectory(dfch)"
 
       - name: Get sccache path
-        shell: pwsh
         run: |
           echo ("SCCACHE_DIR=" + $env:LOCALAPPDATA + "\Mozilla\sccache\cache") >> $env:GITHUB_ENV
 
@@ -89,17 +83,17 @@ jobs:
       - name: Configure DFHack
         working-directory: ${{ github.workspace }}/dfhack
         run: |
-          cmake \
-            -S . \
-            -B build \
-            -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=output \
-            -DCMAKE_C_COMPILER_LAUNCHER=sccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-            -DBUILD_LIBRARY:BOOL=ON \
-            -DBUILD_PLUGINS:BOOL=ON \
-            -DBUILD_SUPPORTED:BOOL=OFF \
+          cmake `
+            -S . `
+            -B build `
+            -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_INSTALL_PREFIX=output `
+            -DCMAKE_C_COMPILER_LAUNCHER=sccache `
+            -DCMAKE_CXX_COMPILER_LAUNCHER=sccache `
+            -DBUILD_LIBRARY:BOOL=ON `
+            -DBUILD_PLUGINS:BOOL=ON `
+            -DBUILD_SUPPORTED:BOOL=OFF `
             -DBUILD_DEV_PLUGINS:BOOL=OFF
 
       - name: Build plugin
@@ -110,7 +104,7 @@ jobs:
 
       - name: Report DFHack version
         run: |
-          echo "### Built against DFHack version: ${{ steps.dfhack-tag.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "### Built against DFHack version: ${{ steps.dfhack-tag.outputs.tag }}"
 
       - name: Finalize sccache
         run: |
@@ -125,13 +119,13 @@ jobs:
 
       - name: Prep artifact
         run: |
-          mkdir -p "${{ github.workspace }}"/artifact
-          plugin=$(find "${{ github.workspace }}"/dfhack/build -name "dfch.plug.dll" -type f | head -1)
-          if [ -z "$plugin" ]; then
-            echo "::error::dfch.plug.dll not found in build tree"
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}/artifact"
+          $plugin = Get-ChildItem -Recurse -Path "${{ github.workspace }}/dfhack/build" -Filter "dfch.plug.dll" | Select-Object -First 1
+          if (-not $plugin) {
+            Write-Host "::error::dfch.plug.dll not found in build tree"
             exit 1
-          fi
-          cp "$plugin" "${{ github.workspace }}"/artifact/dfch.plug.dll
+          }
+          Copy-Item -Path $plugin.FullName -Destination "${{ github.workspace }}/artifact/dfch.plug.dll"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
