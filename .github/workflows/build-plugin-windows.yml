@@ -1,0 +1,140 @@
+name: Build dfch plugin (win64)
+
+on:
+  workflow_call:
+
+jobs:
+  build-win64:
+    name: Build win64
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out plugin source
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Install build dependencies
+        run: |
+          choco install sccache
+
+      - name: Setup vcpkg cache
+        id: vcpkg-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: plugin/3rdParty/vcpkg_installed
+          key: vcpkg-win-${{ hashFiles('plugin/3rdParty/vcpkg.json') }}
+
+      - name: Install vcpkg dependencies
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          vcpkg install `
+            --x-manifest-root=${{ github.workspace }}/plugin `
+            --x-install-root=${{ github.workspace }}/plugin/3rdParty/vcpkg_installed `
+            --triplet x64-windows
+        env:
+          VCPKG_MAX_CONCURRENCY: 2
+
+      - name: Save vcpkg cache
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: plugin/3rdParty/vcpkg_installed
+          key: vcpkg-win-${{ hashFiles('plugin/3rdParty/vcpkg.json') }}
+
+      - name: Look up latest DFHack release tag
+        id: dfhack-tag
+        run: |
+          tag=$(gh api repos/DFHack/dfhack/releases/latest --jq .tag_name)
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "Using DFHack tag: $tag"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Clone DFHack
+        uses: actions/checkout@v4
+        with:
+          repository: DFHack/dfhack
+          ref: ${{ steps.dfhack-tag.outputs.tag }}
+          submodules: true
+          fetch-depth: 1
+          path: dfhack
+
+      - name: Copy plugin into DFHack external plugins tree
+        run: |
+          mkdir -p ${{ github.workspace }}/dfhack/plugins/external/dfch
+          cp -a ${{ github.workspace }}/plugin/. ${{ github.workspace }}/dfhack/plugins/external/dfch/
+          echo "add_subdirectory(dfch)" \
+            > ${{ github.workspace }}/dfhack/plugins/external/CMakeLists.txt
+
+      - name: Get sccache path
+        shell: pwsh
+        run: |
+          echo ("SCCACHE_DIR=" + $env:LOCALAPPDATA + "\Mozilla\sccache\cache") >> $env:GITHUB_ENV
+
+      - name: Fetch sccache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SCCACHE_DIR }}
+          key: win-msvc-dfch-${{ github.sha }}
+          restore-keys: |
+            win-msvc-dfch-
+            win-msvc
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure DFHack
+        working-directory: ${{ github.workspace }}/dfhack
+        run: |
+          cmake \
+            -S . \
+            -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=output \
+            -DCMAKE_C_COMPILER_LAUNCHER=sccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
+            -DBUILD_LIBRARY:BOOL=ON \
+            -DBUILD_PLUGINS:BOOL=ON \
+            -DBUILD_SUPPORTED:BOOL=OFF \
+            -DBUILD_DEV_PLUGINS:BOOL=OFF
+
+      - name: Build plugin
+        working-directory: ${{ github.workspace }}/dfhack
+        env:
+          SCCACHE_CACHE_SIZE: 500M
+        run: ninja -C build dfch
+
+      - name: Report DFHack version
+        run: |
+          echo "### Built against DFHack version: ${{ steps.dfhack-tag.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Finalize sccache
+        run: |
+          sccache --show-stats
+          sccache --zero-stats
+
+      - name: Save sccache
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SCCACHE_DIR }}
+          key: win-msvc-dfch-${{ github.sha }}
+
+      - name: Prep artifact
+        run: |
+          mkdir -p ${{ github.workspace }}/artifact
+          plugin=$(find ${{ github.workspace }}/dfhack/build -name "dfch.plug.dll" -type f | head -1)
+          if [ -z "$plugin" ]; then
+            echo "::error::dfch.plug.dll not found in build tree"
+            exit 1
+          fi
+          cp "$plugin" ${{ github.workspace }}/artifact/dfch.plug.dll
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dfch-win64
+          path: ${{ github.workspace }}/artifact/

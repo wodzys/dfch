@@ -1,0 +1,8 @@
+name: Build dfch plugin
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build-windows:
+    uses: ./.github/workflows/build-plugin-windows.yml
+    secrets: inherit
