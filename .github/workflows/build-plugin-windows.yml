@@ -32,7 +32,7 @@ jobs:
         shell: pwsh
         run: |
           vcpkg install `
-            --x-manifest-root=${{ github.workspace }}/plugin `
+            --x-manifest-root=${{ github.workspace }}/plugin/3rdParty `
             --x-install-root=${{ github.workspace }}/plugin/3rdParty/vcpkg_installed `
             --triplet x64-windows
         env:
