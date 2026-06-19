@@ -1,24 +1,19 @@
 # Dwarf Fortress 中文汉化插件 (df-chinese)
 
+> **[English README](README_EN.md)** — English version of this document
+
 一个为《Dwarf Fortress》（矮人要塞）开发的中文汉化插件，基于 DFHack 框架实现游戏界面文本的实时中文翻译与渲染。
 
 ## 项目简介
 
-该插件作为 DFHack 插件运行，通过以下核心技术实现游戏界面汉化：
-
-- **内存直读**：直接访问 Dwarf Fortress 的 `gps.screen` / `gps.screen_top` 内存缓冲区，提取游戏界面上的文本内容
-- **SDL2 渲染拦截**：使用 Microsoft Detours 挂钩 SDL2 渲染函数（`SDL_RenderPresent` 等），在渲染管线中注入中文翻译纹理
-- **两层级翻译引擎**：CSV 精确匹配词典 + TOML 规则引擎（递归重写），实现从简单词汇到复合文本的完整翻译覆盖
-- **TTF 字体渲染**：运行时动态加载 SDL2_ttf，使用中文字体渲染翻译结果并通过 LRU 纹理缓存叠加到游戏画面
+该插件作为 DFHack 插件运行，通过内存直读、SDL2 渲染拦截、两层级翻译引擎和 TTF 字体渲染四部分核心技术实现游戏界面汉化。详见下方[技术架构](#技术架构)。
 
 ## 功能特点
 
 - **实时文本翻译**：每帧自动检测游戏界面上的英文文本并替换为中文
-- **两层级翻译系统**：
-  - **一级 (Dictionary)**：CSV 精确匹配，支持数字归一化（digits → `{d}`），线程安全（读写锁）
-  - **二级 (Rulesets)**：TOML 规则引擎，支持递归重写、跨命名空间引用、循环检测，带 LRU 记忆化缓存
+- **两层级翻译系统**：CSV 精确匹配词典 + TOML 规则引擎（递归重写、跨命名空间引用、`@placeholder` 文本捕获、循环检测、LRU 记忆化缓存）
 - **句子级文本检测**：字符级分析结合位置、大小写和标点规则，将单字符组合为句子/词语
-- **TTF 中文字体渲染**：动态加载 SDL2_ttf.dll，支持按像素高度匹配字体，无需链接时依赖
+- **TTF 中文字体渲染**：动态加载 SDL2_ttf.dll，支持按像素高度匹配中文字体
 - **颜色保留**：翻译过程中保留原始文本的颜色信息，支持动态颜色实时更新
 - **未翻译文本收集**：自动收集未匹配的文本（FIFO，上限 2000），可一键导出
 
@@ -34,14 +29,14 @@ SentenceDetector.detectSentences()   字符级检测 → 句子/词语分组
        │
        ▼
 ScreenManager::processTranslations()
-  ├─ 1. DICTIONARY.tryTranslate()    CSV 精确匹配（含数字归一化）
-  └─ 2. RULESETS.translate()         TOML 规则引擎（递归重写 + 记忆化缓存）
+  ├─ 1. DICTIONARY.tryTranslate()    CSV 精确匹配 (含数字归一化)
+  └─ 2. RULESETS.translate()         TOML 规则引擎 (递归重写 + @placeholder + 记忆化缓存)
        │
        ▼
 TTFManager::RenderBlendedText()      中文 TTF 渲染 → SDL_Surface → SDL_Texture
        │
        ▼
-LRU 纹理缓存 (500 条)               命中直接复用，未命中重新生成
+LRU 纹理缓存 (500 条)               命中复用，未命中重新生成
        │
        ▼
 SDL_RenderCopy (via g_sdl2 hooks)    中文纹理叠加到游戏画面
@@ -55,11 +50,11 @@ SDL_RenderCopy (via g_sdl2 hooks)    中文纹理叠加到游戏画面
 | **Hook 管理** | `hooks.cpp/h`, `sdl2_hooks.cpp/h`, `hook_common.h` | Detours 挂钩/解挂，~50 个 SDL2 函数指针运行时加载 |
 | **ScreenManager** | `screen_manager.cpp/h` | 核心调度器：屏幕缓冲区处理、翻译调度、纹理创建与缓存、渲染叠加 |
 | **DictManager** | `dict_manager.cpp/h` | CSV 词典管理：精确匹配 + 数字归一化 + 单词级查询，线程安全 |
-| **RulesetsManager** | `rulesets_manager.cpp/h` | TOML 规则引擎：递归重写、跨命名空间引用解析、循环检测、LRU 记忆化缓存 |
+| **RulesetsManager** | `rulesets_manager.cpp/h` | TOML 规则引擎：递归重写、`@placeholder` 文本捕获、跨命名空间引用解析、DFS 循环检测、LRU 记忆化缓存 |
 | **SentenceDetector** | `sentence_detector.cpp/h` | 字符级文本检测：编译期查找表，基于位置/大小写/标点的句子分组 |
-| **TTFManager** | `ttf_manager.cpp/h` | SDL2_ttf 运行时加载、字体匹配（二分查找）、文本→Surface 渲染 |
+| **TTFManager** | `ttf_manager.cpp/h` | SDL2_ttf 运行时加载、字体匹配、文本→Surface 渲染 |
 | **LoggerManager** | `logger.cpp/h` | spdlog 异步日志：滚动文件（10MB×3）+ 未翻译文本独立日志 |
-| **Config** | `config.cpp/h` | 配置文件解析、路径管理（懒加载） |
+| **Config** | `config.cpp/h` | 配置文件解析、路径管理 |
 
 ### 初始化顺序
 
@@ -128,7 +123,7 @@ Shutdown 逆序: SentenceDetector → Rulesets → Dict → TTF
 
 ## 配置说明
 
-编辑 `data/dfch_config.txt`（`[KEY:VALUE]` 格式）：
+编辑 `data/dfch_config.txt`（`[KEY:VALUE]` 格式）。所有路径在运行时通过 `Core::getHackPath()` 解析为 `<hack>/data/dfch/` 下的相对路径：
 
 | 配置项 | 说明 | 默认值 |
 |--------|------|--------|
@@ -144,8 +139,8 @@ Shutdown 逆序: SentenceDetector → Rulesets → Dict → TTF
 | 列 | 说明 |
 |----|------|
 | 第一列 | 英文原文 |
-| 第二列 | 中文翻译，支持 `\n` 换行符和 `\a#FFFFFFHello\a` 颜色标记 |
-| 第三列 | 控制字符：空=`l`(左对齐), `c`(居中), `b`(闪烁/实时更新), `s`(含转义字符), `d`=`b`+`c` |
+| 第二列 | 中文翻译，支持 `\n` 换行和 `\a#FFFFFFHello\a` 颜色标记 |
+| 第三列 | 控制字符：空=左对齐, `c`=居中, `b`=实时更新, `s`=含转义字符, `d`=`b`+`c` |
 
 示例：
 ```csv
@@ -154,13 +149,42 @@ Shutdown 逆序: SentenceDetector → Rulesets → Dict → TTF
 "Hello World","你好 \a#FF0000世界\a","s"
 ```
 
+## TOML 规则集格式说明
+
+规则集文件位于 `data/rulesets/zh-Hans/`，采用 TOML 格式。目录树映射为 `::ns::subns` 命名空间标识符，`index.toml` 为根规则集。
+
+### Token 类型
+
+| Token | 语法 | 说明 |
+|-------|------|------|
+| **Literal** | 纯文本 | 大小写不敏感前缀匹配 |
+| **Reference** | `{::ns::rule}` | 递归引用其他命名空间的规则 |
+| **Builtin** | `{#digits}` | 内置替换器（如 `#digits` 匹配首部连续 ASCII 数字） |
+| **Placeholder** | `{@name}` | 捕获任意文本并原样穿透输出，用于模板字符串翻译 |
+| **Replacer** | `{%name:ns}` | 特殊处理 token（如 `%item_designation`），剥离标记后委托到指定命名空间翻译，再恢复标记包装 |
+
+### Placeholder 示例
+
+```toml
+# 捕获要塞名称并保留在输出中
+"A new chapter of dwarven history begins here at this place, {@ph}. Strike the earth!" = "矮人历史的新篇章在这里{@ph}开始书写. 开山掘地！"
+```
+
+Placeholder 以 `@` 开头，仅作用于当前规则内部（不解析为命名空间引用）。若其后紧跟 Literal token，则该 Literal 作为分隔符确定捕获边界；若为最后一个 token，则消费全部剩余文本。
+
+### Replacer 说明
+
+Replacer 以 `%` 开头，对匹配文本执行特殊预处理后再翻译。当前支持的 Replacer：
+
+| Replacer | 格式 | 说明 |
+|----------|------|------|
+| `%item_designation` | `{%item_designation:ns}` 或 `{%item_designation:ns:subns}` | 匹配物品标记（品质符号 `-` `+` `*` `=` `☼`、磨损 `x` `X` `XX`、火焰 `‼`、所有权 `$`、异地 `()`、无主 `{}`、装饰 `<>`、魔法 `◄►`），剥离标记后委托到指定命名空间翻译内部文本，最后恢复标记包装 |
+
 ## 构建
 
-DFHack 插件需在 DFHack 源码树中编译，完整环境搭建参考：
+DFHack 插件需在 DFHack 源码树中编译，完整环境搭建参考 [DFHack 编译指南 — Windows](https://docs.dfhack.org/en/stable/docs/dev/compile/Compile.html#windows)。
 
-- [DFHack 编译指南 — Windows](https://docs.dfhack.org/en/stable/docs/dev/compile/Compile.html#windows)
-
-本插件额外依赖（vcpkg manifest 管理）：detours、spdlog、tomlplusplus；SDL2_ttf 在 CMake 配置时自动下载。
+额外依赖（vcpkg manifest 管理）：detours、spdlog、tomlplusplus；SDL2_ttf 在 CMake 配置时自动下载。
 
 ### 编译步骤
 
