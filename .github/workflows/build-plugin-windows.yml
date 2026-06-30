@@ -15,6 +15,16 @@ on:
       built_tag:
         description: 'The DFHack tag that was actually built against'
         value: ${{ jobs.build-win64.outputs.built_tag }}
+  workflow_dispatch:
+    inputs:
+      dfhack_tag:
+        description: 'DFHack tag to build against (leave empty for auto-detect latest)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   build-win64:
