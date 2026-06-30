@@ -150,7 +150,7 @@ jobs:
           done
 
           # SDL2_ttf.dll — runtime dependency for Chinese font rendering
-          SDL2_TTF_VERSION=$(grep -oP 'set\(SDL2_TTF_VERSION\s+\K\S+' "${{ github.workspace }}/repo/CMakeLists.txt" | tr -d '"')
+          SDL2_TTF_VERSION=$(grep -oP 'set\(SDL2_TTF_VERSION\s+\K[0-9.]+' "${{ github.workspace }}/repo/CMakeLists.txt")
           echo "SDL2_ttf version: ${SDL2_TTF_VERSION}"
           curl -sLO "https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDL2_TTF_VERSION}/SDL2_ttf-devel-${SDL2_TTF_VERSION}-VC.zip"
           unzip -j "SDL2_ttf-devel-${SDL2_TTF_VERSION}-VC.zip" "lib/x64/SDL2_ttf.dll" -d "scripts_modinstalled/internal/"

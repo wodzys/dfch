@@ -51,7 +51,7 @@ jobs:
           VCPKG_MAX_CONCURRENCY: 2
 
       - name: Save vcpkg cache
-        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true' && github.ref_type == 'branch'
         uses: actions/cache/save@v4
         with:
           path: plugin/3rdParty/vcpkg_installed
@@ -93,6 +93,7 @@ jobs:
         with:
           path: ${{ env.SCCACHE_DIR }}
           key: win-msvc-dfzh-${{ steps.dfhack-tag.outputs.tag }}
+          restore-keys: win-msvc-dfzh-
 
       - uses: ilammy/msvc-dev-cmd@v1
 
@@ -128,6 +129,7 @@ jobs:
           sccache --zero-stats
 
       - name: Save sccache
+        if: github.ref_type == 'branch'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.SCCACHE_DIR }}
