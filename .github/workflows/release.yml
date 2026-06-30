@@ -91,6 +91,9 @@ jobs:
     name: Package release
     needs: [prepare, build]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
     steps:
       - name: Checkout source at tagged version
         uses: actions/checkout@v4
@@ -175,7 +178,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
-          commit: ${{ needs.prepare.outputs.project_commit_sha }}
           name: "dfzh ${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
           artifacts: "release/dfzh-${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}-win64.zip"
           artifactErrorsFailBuild: true
