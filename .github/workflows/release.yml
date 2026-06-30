@@ -1,0 +1,191 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dfhack_tag_count:
+        description: 'Number of DFHack release tags to build against (default 5)'
+        required: false
+        default: 5
+        type: number
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  prepare:
+    name: Prepare build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      dfhack_tags: ${{ steps.fetch-dfhack-tags.outputs.dfhack_tags }}
+      dfhack_tags_md: ${{ steps.fetch-dfhack-tags.outputs.dfhack_tags_md }}
+      latest_dfhack_tag: ${{ steps.fetch-dfhack-tags.outputs.latest_dfhack_tag }}
+      project_tag: ${{ steps.fetch-project-tag.outputs.project_tag }}
+      project_commit_sha: ${{ steps.fetch-project-tag.outputs.project_commit_sha }}
+    steps:
+      - name: Fetch latest project tag
+        id: fetch-project-tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            tag="${GITHUB_REF_NAME}"
+            commit_sha="${GITHUB_SHA}"
+          else
+            REPO="${{ github.repository }}"
+            OWNER="${REPO%%/*}"
+            REPO_NAME="${REPO#*/}"
+            GRAPHQL_QUERY="query { repository(owner: \"${OWNER}\", name: \"${REPO_NAME}\") { refs(refPrefix: \"refs/tags/\", first: 1, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) { nodes { name target { ... on Commit { oid } ... on Tag { target { ... on Commit { oid } } } } } } } }"
+            TAG_INFO=$(gh api graphql -f query="${GRAPHQL_QUERY}" --jq '.data.repository.refs.nodes[0]') || {
+              echo "gh api graphql failed to fetch latest tag. Aborting."
+              exit 1
+            }
+            if [[ -z "$TAG_INFO" || "$TAG_INFO" == "null" ]]; then
+              echo "No tag found in repository. Aborting."
+              exit 1
+            fi
+            tag=$(echo "$TAG_INFO" | jq -r '.name')
+            tag="${tag%%-*}"
+            commit_sha=$(echo "$TAG_INFO" | jq -r '.target.oid // .target.target.oid')
+          fi
+          echo "project_tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "project_commit_sha=$commit_sha" >> "$GITHUB_OUTPUT"
+          echo "Project tag: $tag (commit: $commit_sha)"
+
+      - name: Fetch latest DFHack release tags
+        id: fetch-dfhack-tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          count="${{ github.event.inputs.dfhack_tag_count || 5 }}"
+          tags=$(gh api repos/DFHack/dfhack/releases --jq ".[:${count}].[].tag_name" | \
+            jq -R -s -c 'split("\n")[:-1]')
+          latest=$(echo "$tags" | jq -r '.[0]')
+          md_tags=$(echo "$tags" | jq -r '.[]' | while read -r t; do echo "- \`$t\`"; done)
+          echo "dfhack_tags=$tags" >> "$GITHUB_OUTPUT"
+          echo "latest_dfhack_tag=$latest" >> "$GITHUB_OUTPUT"
+          {
+            echo "dfhack_tags_md<<DFHTAGSMDEOF"
+            echo "$md_tags"
+            echo "DFHTAGSMDEOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "Will build against: $tags | Latest DFHack tag: $latest"
+
+  build:
+    name: Build against ${{ matrix.dfhack_tag }}
+    needs: prepare
+    strategy:
+      matrix:
+        dfhack_tag: ${{ fromJSON(needs.prepare.outputs.dfhack_tags) }}
+    uses: ./.github/workflows/build-plugin-windows.yml
+    with:
+      dfhack_tag: ${{ matrix.dfhack_tag }}
+      checkout_ref: ${{ needs.prepare.outputs.project_tag }}
+    secrets: inherit
+
+  package:
+    name: Package release
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source at tagged version
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.project_tag }}
+          path: repo
+
+      - name: Download built plugin artifacts
+        id: download-artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dfch-win64-*
+          path: artifacts/
+          merge-multiple: false
+
+      - name: Assemble release package
+        id: assemble-package
+        shell: bash
+        run: |
+          project_tag="${{ needs.prepare.outputs.project_tag }}"
+          dfhack_tag="${{ needs.prepare.outputs.latest_dfhack_tag }}"
+          pkg_dir="dfch-${project_tag}-${dfhack_tag}"
+          mkdir -p "release/${pkg_dir}"
+          cd "release/${pkg_dir}"
+
+          # --- Loader structure ---
+          cp "${{ github.workspace }}/repo/loader/info.txt" .
+
+          # Set NUMERIC_VERSION to current release count
+          RELEASE_COUNT=$(gh api repos/${{ github.repository }}/releases --jq 'length' 2>/dev/null || echo "0")
+          echo "Release count for NUMERIC_VERSION: ${RELEASE_COUNT}"
+          sed -i "s/\[NUMERIC_VERSION:0\]/[NUMERIC_VERSION:${RELEASE_COUNT}]/" info.txt
+
+          cp "${{ github.workspace }}/repo/loader/preview.png" .
+
+          # Lua loader script
+          mkdir -p scripts_modinstalled
+          cp "${{ github.workspace }}/repo/loader/scripts_modinstalled/dfzh_loader.lua" scripts_modinstalled/
+
+          # Data files (dicts, rules, fonts)
+          mkdir -p scripts_modinstalled/internal/data
+          cp -r "${{ github.workspace }}/repo/data/"* scripts_modinstalled/internal/data/
+
+          # Plugin DLLs — one per DFHack tag
+          mkdir -p scripts_modinstalled/internal/plugins
+
+          for artifact_dir in "${{ github.workspace }}/artifacts/dfch-win64-"*/; do
+            [ -d "$artifact_dir" ] || continue
+            tag=$(basename "$artifact_dir" | sed 's/^dfch-win64-//')
+            dll_path=$(find "$artifact_dir" -type f -name "dfch-*.plug.dll" | head -1)
+            if [ -n "$dll_path" ]; then
+              cp "$dll_path" "scripts_modinstalled/internal/plugins/$(basename "$dll_path")"
+              echo "  ✓ $(basename "$dll_path")"
+            else
+              echo "  ⚠ dfch-*.plug.dll not found for tag: ${tag}"
+            fi
+          done
+
+          # SDL2_ttf.dll — runtime dependency for Chinese font rendering
+          SDL2_TTF_VERSION=$(grep -oP 'set\(SDL2_TTF_VERSION\s+\K\S+' "${{ github.workspace }}/repo/CMakeLists.txt" | tr -d '"')
+          echo "SDL2_ttf version: ${SDL2_TTF_VERSION}"
+          curl -sLO "https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDL2_TTF_VERSION}/SDL2_ttf-devel-${SDL2_TTF_VERSION}-VC.zip"
+          unzip -j "SDL2_ttf-devel-${SDL2_TTF_VERSION}-VC.zip" "lib/x64/SDL2_ttf.dll" -d "scripts_modinstalled/internal/"
+          rm "SDL2_ttf-devel-${SDL2_TTF_VERSION}-VC.zip"
+          echo "  ✓ SDL2_ttf.dll"
+
+      - name: Create release archive
+        id: create-archive
+        working-directory: release
+        run: |
+          tag="${{ needs.prepare.outputs.project_tag }}"
+          dfhack_tag="${{ needs.prepare.outputs.latest_dfhack_tag }}"
+          archive="dfch-${tag}-${dfhack_tag}-win64.zip"
+          pkg_dir="dfch-${tag}-${dfhack_tag}"
+          zip -r "${archive}" "${pkg_dir}/"
+          echo "Created: ${archive}"
+
+      - name: Create or update GitHub release
+        id: publish-release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
+          commit: ${{ needs.prepare.outputs.project_commit_sha }}
+          name: "dfch ${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
+          artifacts: "release/dfch-${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}-win64.zip"
+          artifactErrorsFailBuild: true
+          body: |
+            ## Dwarf Fortress 中文汉化模组 ${{ needs.prepare.outputs.project_tag }}
+
+            **兼容的 DFHack 版本:**
+            ${{ needs.prepare.outputs.dfhack_tags_md }}
+
+            ### 使用说明
+            1. 打开 Steam Workshop，搜索并订阅 **"Dwarf Fortress Chinese Mod"**
+            2. 启动游戏，mod 将自动生效
+          allowUpdates: false
+          prerelease: true
+          draft: true

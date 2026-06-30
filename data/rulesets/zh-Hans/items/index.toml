@@ -3,6 +3,21 @@ base = "items"
 [[rulesets]]
 [rulesets.rules]
 "{^0}{%item_designation:with_number}" = "{^0}{%item_designation:with_number}"
+"{::plants::name::singular}, {::plants::growth::plural}" = "{::plants::name::singular}、{::plants::growth::plural}"
+"{::plants::name::plural}, {::plants::growth::plural}" = "{::plants::name::plural}、{::plants::growth::plural}"
+"{::plants::name::singular}, {::plants::growth::singular}" = "{::plants::name::singular}、{::plants::growth::singular}"
+"{::plants::growth::plural}, {plants_growth_plural_repeat}" = "{::plants::growth::plural}、{plants_growth_plural_repeat}"
+"{::plants::growth::singular}, {plants_growth_singular_repeat}" = "{::plants::growth::singular}、{plants_growth_singular_repeat}"
+
+[[rulesets]]
+name = "plants_growth_plural_repeat"
+[rulesets.rules]
+"{::plants::growth::plural}" = "{::plants::growth::plural}"
+
+[[rulesets]]
+name = "plants_growth_singular_repeat"
+[rulesets.rules]
+"{::plants::growth::singular}" = "{::plants::growth::singular}"
 
 [[rulesets]]
 name = "with_number"

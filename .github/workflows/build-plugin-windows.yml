@@ -2,15 +2,31 @@ name: Build dfch plugin (win64)
 
 on:
   workflow_call:
+    inputs:
+      dfhack_tag:
+        description: 'DFHack tag to build against (auto-detect if empty)'
+        required: false
+        type: string
+      checkout_ref:
+        description: 'Git ref to checkout plugin source (default: event ref)'
+        required: false
+        type: string
+    outputs:
+      built_tag:
+        description: 'The DFHack tag that was actually built against'
+        value: ${{ jobs.build-win64.outputs.built_tag }}
 
 jobs:
   build-win64:
     name: Build win64
     runs-on: windows-2022
+    outputs:
+      built_tag: ${{ steps.dfhack-tag.outputs.tag }}
     steps:
       - name: Check out plugin source
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.checkout_ref || github.ref }}
           path: plugin
 
       - name: Install build dependencies
@@ -41,12 +57,15 @@ jobs:
           path: plugin/3rdParty/vcpkg_installed
           key: vcpkg-win-${{ hashFiles('plugin/3rdParty/vcpkg.json') }}
 
-      - name: Look up latest DFHack release tag
+      - name: Determine DFHack tag
         id: dfhack-tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = gh api repos/DFHack/dfhack/releases/latest --jq ".tag_name"
+          $tag = "${{ inputs.dfhack_tag }}"
+          if (-not $tag) {
+            $tag = gh api repos/DFHack/dfhack/releases/latest --jq ".tag_name"
+          }
           Add-Content -Path $env:GITHUB_OUTPUT -Value "tag=$tag"
           Write-Host "Using DFHack tag: $tag"
 
@@ -67,16 +86,13 @@ jobs:
 
       - name: Get sccache path
         run: |
-          echo ("SCCACHE_DIR=" + $env:LOCALAPPDATA + "\Mozilla\sccache\cache") >> $env:GITHUB_ENV
+          Add-Content -Path $env:GITHUB_ENV -Value "SCCACHE_DIR=$env:LOCALAPPDATA\Mozilla\sccache\cache"
 
       - name: Fetch sccache
         uses: actions/cache/restore@v4
         with:
           path: ${{ env.SCCACHE_DIR }}
-          key: win-msvc-dfch-${{ github.sha }}
-          restore-keys: |
-            win-msvc-dfch-
-            win-msvc
+          key: win-msvc-dfch-${{ steps.dfhack-tag.outputs.tag }}
 
       - uses: ilammy/msvc-dev-cmd@v1
 
@@ -115,7 +131,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ${{ env.SCCACHE_DIR }}
-          key: win-msvc-dfch-${{ github.sha }}
+          key: win-msvc-dfch-${{ steps.dfhack-tag.outputs.tag }}
 
       - name: Prep artifact
         run: |
@@ -125,10 +141,11 @@ jobs:
             Write-Host "::error::dfch.plug.dll not found in build tree"
             exit 1
           }
-          Copy-Item -Path $plugin.FullName -Destination "${{ github.workspace }}/artifact/dfch.plug.dll"
+          $tag = "${{ steps.dfhack-tag.outputs.tag }}"
+          Copy-Item -Path $plugin.FullName -Destination "${{ github.workspace }}/artifact/dfch-${tag}.plug.dll"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dfch-win64
+          name: dfch-win64-${{ steps.dfhack-tag.outputs.tag }}
           path: ${{ github.workspace }}/artifact/

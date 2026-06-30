@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch latest DFHack release
-        id: latest
+        id: fetch-dfhack-latest
         run: |
           tag=$(gh api repos/DFHack/dfhack/releases/latest --jq .tag_name)
           echo "tag=$tag" >> $GITHUB_OUTPUT
@@ -22,43 +22,26 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Restore last-known tag
-        id: cache
+      - name: Restore last-known DFHack tag
+        id: restore-known-tag
         uses: actions/cache/restore@v4
         with:
           path: dfhack_tag.txt
-          key: dfhack-tag-${{ steps.latest.outputs.tag }}
-          restore-keys: |
-            dfhack-tag-
+          key: dfhack-tag-${{ steps.fetch-dfhack-latest.outputs.tag }}
 
-      - name: Check for new release
-        id: check
+      - name: Trigger dfch release workflow
+        if: steps.restore-known-tag.outputs.cache-hit != 'true'
+        id: trigger-release
         run: |
-          latest=${{ steps.latest.outputs.tag }}
-          if [ -f dfhack_tag.txt ]; then
-            last=$(cat dfhack_tag.txt)
-            echo "Last known tag: $last"
-            if [ "$latest" = "$last" ]; then
-              echo "No new DFHack release."
-              echo "changed=false" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-          fi
-          echo "New DFHack release detected: $latest"
-          echo "changed=true" >> $GITHUB_OUTPUT
-
-      - name: Trigger build
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          echo "${{ steps.latest.outputs.tag }}" > dfhack_tag.txt
-          gh workflow run build.yml -R ${{ github.repository }} --ref ${{ github.ref_name }}
-          echo "Triggered build.yml for DFHack ${{ steps.latest.outputs.tag }}"
+          gh workflow run release.yml -R ${{ github.repository }}
+          echo "Triggered release.yml for DFHack ${{ steps.fetch-dfhack-latest.outputs.tag }}"
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Save tag for next run
-        if: steps.check.outputs.changed == 'true'
+      - name: Save DFHack tag for next run
+        if: steps.restore-known-tag.outputs.cache-hit != 'true'
+        id: save-known-tag
         uses: actions/cache/save@v4
         with:
           path: dfhack_tag.txt
-          key: dfhack-tag-${{ steps.latest.outputs.tag }}
+          key: dfhack-tag-${{ steps.fetch-dfhack-latest.outputs.tag }}

@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
+set(DFCH_VERSION "0.8.0")
 project(dfch)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -72,16 +73,16 @@ endif()
 
 # --- 4. Source file list ---
 set(PROJECT_SRCS
-    dfch.cpp
-    hooks.cpp
-    sdl2_hooks.cpp
-    dict_manager.cpp
-    rulesets_manager.cpp
-    sentence_detector.cpp
-    screen_manager.cpp
-    ttf_manager.cpp
-    logger.cpp
-    config.cpp
+    dfzh/dfch.cpp
+    dfzh/hooks.cpp
+    dfzh/sdl2_hooks.cpp
+    dfzh/dict_manager.cpp
+    dfzh/rulesets_manager.cpp
+    dfzh/sentence_detector.cpp
+    dfzh/screen_manager.cpp
+    dfzh/ttf_manager.cpp
+    dfzh/logger.cpp
+    dfzh/config.cpp
 )
 
 # --- 5. Create DFHack plugin target ---
@@ -98,11 +99,12 @@ target_include_directories(dfch
         ${TOMLPLUSPLUS_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}          # SDL2.h provided by DFHack
         ${SDL2_TTF_INCLUDE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}   # Local header files
+        ${CMAKE_CURRENT_SOURCE_DIR}/dfzh   # Local header files
 )
 
 # --- 7. Compile definitions ---
-target_compile_definitions(dfch PRIVATE FMT_HEADER_ONLY)
+target_compile_definitions(dfch PRIVATE FMT_HEADER_ONLY
+    DFCH_VERSION="${DFCH_VERSION}")
 
 # --- 8. Install data files ---
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/

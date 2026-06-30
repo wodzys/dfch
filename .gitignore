@@ -1,2 +1,5 @@
 3rdParty/*
 !3rdParty/vcpkg.json
+
+# Standalone test build output
+tests/build/
