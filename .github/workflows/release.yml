@@ -109,6 +109,8 @@ jobs:
       - name: Assemble release package
         id: assemble-package
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           project_tag="${{ needs.prepare.outputs.project_tag }}"
           dfhack_tag="${{ needs.prepare.outputs.latest_dfhack_tag }}"
