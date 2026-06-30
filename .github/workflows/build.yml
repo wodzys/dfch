@@ -2,7 +2,7 @@ name: Build dfzh plugin
 
 on:
   push:
-    tags-ignore:
+    branches:
       - '**'
   workflow_dispatch:
 
