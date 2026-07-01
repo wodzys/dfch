@@ -178,23 +178,13 @@ jobs:
           zip -r "${archive}" "${pkg_dir}/"
           echo "Created: ${archive}"
 
-      - name: Create release tag
-        shell: bash
-        working-directory: repo
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          tag="${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
-          commit="${{ needs.prepare.outputs.project_commit_sha }}"
-          git tag "$tag" "$commit" -m "Release $tag"
-          git push origin "$tag"
-
       - name: Create or update GitHub release
         id: publish-release
         uses: ncipollo/release-action@v1
         with:
+          token: ${{ secrets.PAT_TOKEN }}
           tag: "${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
+          commit: ${{ needs.prepare.outputs.project_commit_sha }}
           name: "dfzh ${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}"
           artifacts: "release/dfzh-${{ needs.prepare.outputs.project_tag }}-${{ needs.prepare.outputs.latest_dfhack_tag }}-win64.zip"
           artifactErrorsFailBuild: true
